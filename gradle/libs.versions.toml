@@ -12,6 +12,7 @@ firebaseBom = "33.1.1"
 services = "4.4.2"
 crashlytics = "3.0.2"
 navigationCompose = "2.7.7"
+coil = "2.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +33,9 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics" }
 firebase-auth = {module = "com.google.firebase:firebase-auth-ktx" }
+firebase-firestore = {module= "com.google.firebase:firebase-firestore"}
+
+coil = {module = "io.coil-kt:coil-compose", version.ref = "coil"}
 
 androidx-navigation-compose = {module = "androidx.navigation:navigation-compose" , version.ref = "navigationCompose"}
 

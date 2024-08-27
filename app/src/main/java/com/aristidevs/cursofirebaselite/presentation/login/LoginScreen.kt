@@ -35,7 +35,7 @@ import com.aristidevs.cursofirebaselite.ui.theme.UnselectedField
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun LoginScreen(auth: FirebaseAuth) {
+fun LoginScreen(auth: FirebaseAuth, navigateToHome:() -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -83,7 +83,7 @@ fun LoginScreen(auth: FirebaseAuth) {
         Button(onClick = {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener{ task ->
                 if(task.isSuccessful){
-                    //Navegar
+                    navigateToHome()
                     Log.i("aris", "LOGIN OK")
                 }else{
                     //Error
