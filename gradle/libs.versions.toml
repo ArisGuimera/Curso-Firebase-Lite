@@ -34,6 +34,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics" }
 firebase-auth = {module = "com.google.firebase:firebase-auth-ktx" }
 firebase-firestore = {module= "com.google.firebase:firebase-firestore"}
+firebase-realtime = {module= "com.google.firebase:firebase-database-ktx"}
 
 coil = {module = "io.coil-kt:coil-compose", version.ref = "coil"}
 

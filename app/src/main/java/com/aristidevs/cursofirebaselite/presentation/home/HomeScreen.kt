@@ -1,9 +1,13 @@
 package com.aristidevs.cursofirebaselite.presentation.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,22 +18,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.aristidevs.cursofirebaselite.R
 import com.aristidevs.cursofirebaselite.presentation.model.Artist
+import com.aristidevs.cursofirebaselite.presentation.model.Player
 import com.aristidevs.cursofirebaselite.ui.theme.Black
+import com.aristidevs.cursofirebaselite.ui.theme.Purple40
 
 @Composable
 fun HomeScreen(viewmodel: HomeViewmodel = HomeViewmodel()) {
 
     val artists: State<List<Artist>> = viewmodel.artist.collectAsState()
+    val player by viewmodel.player.collectAsState()
 
     Column(
         Modifier
@@ -45,19 +55,61 @@ fun HomeScreen(viewmodel: HomeViewmodel = HomeViewmodel()) {
         )
 
         LazyRow {
-            items(artists.value){
-                ArtistItem(it)
+            items(artists.value) {
+                ArtistItem(artist = it, onItemSelected = {viewmodel.addPlayer(it)})
             }
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+        player?.let {
+            PlayerComponent(player = it,
+                onCancelSelected = { viewmodel.onCancelSelected() },
+                onPlaySelected = { viewmodel.onPlaySelected() })
+        }
+
+    }
+}
+
+@Composable
+fun PlayerComponent(player: Player, onPlaySelected: () -> Unit, onCancelSelected: () -> Unit) {
+
+    val icon = if (player.play == true) R.drawable.ic_pause else R.drawable.ic_play
+
+    Row(
+        Modifier
+            .height(50.dp)
+            .fillMaxWidth()
+            .background(Purple40),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = player.artist?.name.orEmpty(),
+            modifier = Modifier.padding(horizontal = 12.dp),
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Image(painter = painterResource(id = icon),
+            contentDescription = "play/pause",
+            modifier = Modifier
+                .size(40.dp)
+                .clickable { onPlaySelected() })
+        Image(painter = painterResource(id = R.drawable.ic_close),
+            contentDescription = "Close",
+            modifier = Modifier
+                .size(40.dp)
+                .clickable { onCancelSelected() })
     }
 }
 
 
 @Composable
-fun ArtistItem(artist: Artist){
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+fun ArtistItem(artist: Artist, onItemSelected: (Artist) -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable { onItemSelected(artist) }) {
         AsyncImage(
-            modifier = Modifier.size(60.dp).clip(CircleShape),
+            modifier = Modifier
+                .size(60.dp)
+                .clip(CircleShape),
             model = artist.image,
             contentDescription = "Artists image",
         )
@@ -68,14 +120,14 @@ fun ArtistItem(artist: Artist){
 
 @Preview
 @Composable
-fun ArtistItemPreview(){
+fun ArtistItemPreview() {
     val artist = Artist(
         "Pepe",
         "El mejor",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwyXeKDN29AmZgZPLS7n0Bepe8QmVappBwZCeA3XWEbWNdiDFB",
 //        emptyList()
     )
-    ArtistItem(artist = artist)
+    ArtistItem(artist = artist){}
 }
 
 
