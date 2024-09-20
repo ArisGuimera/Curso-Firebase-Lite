@@ -35,6 +35,7 @@ firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics" }
 firebase-auth = {module = "com.google.firebase:firebase-auth-ktx" }
 firebase-firestore = {module= "com.google.firebase:firebase-firestore"}
 firebase-realtime = {module= "com.google.firebase:firebase-database-ktx"}
+firebase-config = {module = "com.google.firebase:firebase-config-ktx"}
 
 coil = {module = "io.coil-kt:coil-compose", version.ref = "coil"}
 

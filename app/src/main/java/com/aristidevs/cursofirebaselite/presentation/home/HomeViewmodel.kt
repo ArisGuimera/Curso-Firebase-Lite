@@ -3,6 +3,7 @@ package com.aristidevs.cursofirebaselite.presentation.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aristidevs.cursofirebaselite.domain.CanAccessToApp
 import com.aristidevs.cursofirebaselite.presentation.model.Artist
 import com.aristidevs.cursofirebaselite.presentation.model.Player
 import com.google.firebase.database.DataSnapshot
@@ -23,6 +24,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class HomeViewmodel : ViewModel() {
+    private var canAccessToApp: CanAccessToApp = CanAccessToApp()
     private val database = Firebase.database
     private var db: FirebaseFirestore = Firebase.firestore
 
@@ -32,12 +34,27 @@ class HomeViewmodel : ViewModel() {
     private val _player = MutableStateFlow<Player?>(null)
     val player: StateFlow<Player?> = _player
 
+    private val _blockVersion = MutableStateFlow<Boolean>(false)
+    val blockVersion:StateFlow<Boolean> = _blockVersion
+
     init {
+
 //        repeat(20) {
 //            loadData()
 //        }
+        checkUserVersion()
         getArtists()
         getPlayer()
+    }
+
+    private fun checkUserVersion() {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO){
+                canAccessToApp()
+            }
+            _blockVersion.value = !result
+
+        }
     }
 
     private fun getPlayer() {
@@ -47,6 +64,7 @@ class HomeViewmodel : ViewModel() {
                 _player.value = player
             }
         }
+
     }
 
 //    private fun loadData() {
